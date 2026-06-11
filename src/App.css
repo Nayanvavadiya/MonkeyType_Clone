@@ -297,8 +297,6 @@
 
 .char.next {
   color: var(--main-color);
-  text-decoration: underline 2px var(--main-color);
-  text-underline-offset: 0.15rem;
 }
 
 .char.extra {

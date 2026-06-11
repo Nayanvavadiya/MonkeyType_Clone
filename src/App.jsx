@@ -180,18 +180,22 @@ export default function App() {
     const charEls = activeWordEl.querySelectorAll('.char');
     const typedLength = currentInput.length;
 
-    // offsets are relative to words-container (our shared parent)
+    // offsetLeft/offsetTop of charEls are relative to .word (which is position:relative)
+    // We need to add the word's own offset relative to .words-container
+    const wordLeft = activeWordEl.offsetLeft;
+    const wordTop = activeWordEl.offsetTop;
+
     const targetLeft = charEls.length === 0
-      ? activeWordEl.offsetLeft
+      ? wordLeft
       : (typedLength < charEls.length
-        ? charEls[typedLength].offsetLeft
-        : charEls[charEls.length - 1].offsetLeft + charEls[charEls.length - 1].offsetWidth);
+        ? wordLeft + charEls[typedLength].offsetLeft
+        : wordLeft + charEls[charEls.length - 1].offsetLeft + charEls[charEls.length - 1].offsetWidth);
 
     const targetTop = charEls.length === 0
-      ? activeWordEl.offsetTop
+      ? wordTop
       : (typedLength < charEls.length
-        ? charEls[typedLength].offsetTop
-        : charEls[charEls.length - 1].offsetTop);
+        ? wordTop + charEls[typedLength].offsetTop
+        : wordTop + charEls[charEls.length - 1].offsetTop);
 
     caret.style.left = `${targetLeft}px`;
     caret.style.top = `${targetTop}px`;
@@ -535,7 +539,7 @@ export default function App() {
                   </div>
                 ) : (
                   <div className="config-btn-group">
-                    {[10, 25, 50, 100].map((w) => ( 
+                    {[10, 25, 50, 100].map((w) => (
                       <button
                         key={w}
                         className={`config-btn ${wordLimit === w ? 'active' : ''}`}
