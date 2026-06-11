@@ -1,0 +1,108 @@
+/* Custom Theme Specifications */
+:root {
+  /* Slate Midnight (Default Theme) */
+  --bg-color: #11131c;
+  --main-color: #a855f7;
+  --sub-color: #4b5563;
+  --text-color: #e2e8f0;
+  --error-color: #f87171;
+  --error-extra-color: #b91c1c;
+  --caret-color: #a855f7;
+  --card-bg: rgba(23, 27, 43, 0.7);
+  --border-color: #2a2e3f;
+  --hover-color: #c084fc;
+  --focus-outline: rgba(168, 85, 247, 0.3);
+
+  --font-ui: 'Lexend Deca', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+[data-theme='light'] {
+  --bg-color: #f8fafc;
+  --main-color: #6d28d9;
+  --sub-color: #94a3b8;
+  --text-color: #1e293b;
+  --error-color: #dc2626;
+  --error-extra-color: #991b1b;
+  --caret-color: #6d28d9;
+  --card-bg: rgba(255, 255, 255, 0.85);
+  --border-color: #e2e8f0;
+  --hover-color: #8b5cf6;
+  --focus-outline: rgba(109, 40, 217, 0.2);
+}
+
+/* Global Reset & Base Setup */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-ui);
+  min-height: 100vh;
+  transition: background-color 0.25s ease, color 0.25s ease;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem;
+  box-sizing: border-box;
+}
+
+/* Typography elements */
+h1, h2, h3, h4 {
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+/* Glassmorphism utility card */
+.glass-panel {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Smooth Focus Rings */
+input:focus, button:focus, select:focus {
+  outline: 2px solid var(--main-color);
+  outline-offset: 2px;
+}
+
+/* Standard Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--sub-color);
+}
+
+/* Base button animations */
+button {
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
