@@ -246,10 +246,10 @@
 .typing-box {
   position: relative;
   font-family: var(--font-mono);
-  font-size: 1.5rem;
-  line-height: 2.2rem;
-  height: 11rem;
-  /* exactly 5 lines of 2.2rem */
+  font-size: 2rem;
+  line-height: 3rem;
+  height: 12rem;
+  /* exactly 5 lines of 3rem */
   overflow: hidden;
   outline: none;
   user-select: none;
@@ -268,7 +268,7 @@
 }
 
 .word {
-  margin: 0 0.5rem 0 0;
+  margin: 0 1rem 0 0;
   position: relative;
   display: inline-flex;
   white-space: nowrap;
@@ -307,12 +307,12 @@
 .caret {
   position: absolute;
   width: 2.5px;
-  height: 1.7rem;
+  height: 2.8rem;
   background-color: var(--caret-color);
   z-index: 5;
   pointer-events: none;
-  /* Small top offset to visually center the 1.7rem caret in the 2.2rem line height */
-  margin-top: 0.25rem;
+  /* Small top offset to visually center the 2.8rem caret in the 3rem line height */
+  margin-top: 0.1rem;
   transition: left 0.08s cubic-bezier(0.1, 0.8, 0.25, 1), top 0.15s ease-out;
   animation: caret-blink 1.2s infinite;
 }

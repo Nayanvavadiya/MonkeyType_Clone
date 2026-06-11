@@ -13,8 +13,8 @@
   --hover-color: #c084fc;
   --focus-outline: rgba(168, 85, 247, 0.3);
 
-  --font-ui: 'Lexend Deca', system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  --font-ui: 'Google Sans Flex', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Google Sans Flex', system-ui, -apple-system, sans-serif;
 }
 
 [data-theme='light'] {

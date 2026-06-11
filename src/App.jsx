@@ -3,19 +3,20 @@ import './App.css'
 
 // 200 Most Common English Words to Shuffle
 const WORDS_BANK = [
-  "the", "be", "to", "of", "and", "a", "in", "that", "have", "i", "it", "for", "not", "on", "with", "he", "as", "you", "do", "at",
-  "this", "but", "his", "by", "from", "they", "we", "say", "her", "she", "or", "an", "will", "my", "one", "all", "would", "there",
-  "their", "what", "so", "up", "out", "if", "about", "who", "get", "which", "go", "me", "when", "make", "can", "like", "time", "no",
-  "just", "him", "know", "take", "people", "into", "year", "your", "good", "some", "could", "them", "see", "other", "than", "then",
-  "now", "look", "only", "come", "its", "over", "think", "also", "back", "after", "use", "two", "how", "our", "work", "first", "well",
-  "way", "even", "new", "want", "because", "any", "these", "give", "day", "most", "us", "are", "was", "were", "been", "has", "had",
-  "why", "where", "here", "again", "almost", "always", "another", "answer", "around", "ask", "beautiful", "before", "began", "begin",
-  "behind", "believe", "between", "black", "blue", "both", "boy", "bring", "brother", "brought", "build", "busy", "buy", "call",
-  "came", "car", "carry", "center", "change", "child", "children", "city", "clean", "clear", "close", "cold", "color", "country",
-  "course", "cut", "dark", "decide", "different", "does", "done", "door", "down", "draw", "drink", "drive", "each", "early", "earth",
-  "east", "easy", "eat", "education", "egg", "eight", "end", "enough", "ever", "every", "example", "eye", "face", "fact", "fall",
-  "family", "far", "farm", "fast", "father", "fear", "feel", "feet", "few", "field", "fight", "fill", "find", "fine", "fire",
-  "fish", "five", "floor", "fly", "food", "foot", "forest", "forget", "form", "found", "four", "free", "friend", "life", "world"
+  "The", "be", "to", "of", "and", "A", "in", "that", "have", "I", "It", "for", "not", "on", "with", "He", "as", "you", "do", "at",
+  "This", "but", "his", "by", "from", "They", "we", "say", "her", "She", "or", "an", "will", "My", "one", "All", "would", "There",
+  "Their", "What", "so", "up", "out", "if", "about", "who", "get", "Which", "go", "me", "when", "make", "can", "like", "time", "no",
+  "just", "him", "know", "Take", "people", "into", "year", "Your", "good", "some", "could", "Them", "see", "other", "than", "then",
+  "good morning", "new world", "think fast", "work hard", "take care", "beautiful day", "follow through", "look ahead",
+  "now", "look", "only", "Come", "its", "over", "Think", "also", "back", "after", "use", "Two", "how", "our", "work", "First", "well",
+  "way", "even", "New", "want", "because", "Any", "these", "give", "day", "Most", "us", "Are", "was", "were", "been", "has", "had",
+  "Why", "where", "Here", "again", "Almost", "always", "Another", "answer", "around", "ask", "Beautiful", "before", "began", "begin",
+  "behind", "believe", "between", "black", "blue", "Both", "boy", "bring", "Brother", "brought", "build", "busy", "buy", "call",
+  "Came", "car", "Carry", "center", "Change", "child", "children", "city", "Clean", "clear", "close", "cold", "color", "Country",
+  "course", "cut", "Dark", "decide", "different", "Does", "done", "door", "down", "Draw", "drink", "drive", "Each", "early", "earth",
+  "east", "Easy", "eat", "education", "Egg", "eight", "end", "Enough", "ever", "every", "Example", "eye", "face", "fact", "fall",
+  "family", "far", "Farm", "fast", "Father", "fear", "feel", "feet", "Few", "field", "Fight", "fill", "find", "Fine", "fire",
+  "Fish", "five", "Floor", "fly", "food", "Foot", "forest", "forget", "Form", "found", "four", "Free", "friend", "Life", "world"
 ];
 
 
@@ -33,21 +34,59 @@ const getShuffledWords = (count = 150) => {
 };
 
 const getQuoteWords = (count = 150) => {
-  const result = getShuffledWords(count);
-  return result.map((word, index) => {
-    if (index === result.length - 1) return word;
-    const symbol = PUNCTUATION_SYMBOLS[Math.floor(Math.random() * PUNCTUATION_SYMBOLS.length)];
-    return `${word}${symbol}`;
-  });
+  const words = getShuffledWords(count);
+  const result = [];
+  const wordsUntilSymbol = 8; // insert a punctuation symbol after every 8 words
+  let counter = 0;
+
+  for (let i = 0; i < words.length; i++) {
+    const word = words[i];
+    const isLastWord = i === words.length - 1;
+    counter += 1;
+
+    if (!isLastWord && counter >= wordsUntilSymbol) {
+      const symbol = PUNCTUATION_SYMBOLS[Math.floor(Math.random() * PUNCTUATION_SYMBOLS.length)];
+      result.push(`${word}${symbol}`);
+      counter = 0;
+    } else {
+      result.push(word);
+    }
+  }
+
+  return result;
+};
+
+const getRandomNumberString = () => {
+  const length = Math.floor(Math.random() * 4) + 1; // 1 to 4 digit numbers
+  let number = '';
+
+  for (let i = 0; i < length; i++) {
+    number += DIGITS[Math.floor(Math.random() * DIGITS.length)];
+  }
+
+  return number.replace(/^0+/, '') || '0';
 };
 
 const getNumberWords = (count = 150) => {
-  const result = getShuffledWords(count);
-  return result.map((word, index) => {
-    if (index === result.length - 1) return word;
-    const number = DIGITS[Math.floor(Math.random() * DIGITS.length)];
-    return `${word}${number}`;
-  });
+  const words = getShuffledWords(count);
+  const result = [];
+  const minNumbers = Math.max(1, Math.floor(count / 15));
+  const maxNumbers = Math.max(minNumbers, Math.floor(count / 10));
+  const numberCount = Math.floor(Math.random() * (maxNumbers - minNumbers + 1)) + minNumbers;
+  const insertPositions = new Set();
+
+  while (insertPositions.size < numberCount) {
+    insertPositions.add(Math.floor(Math.random() * (words.length + 1)));
+  }
+
+  for (let i = 0; i < words.length; i++) {
+    result.push(words[i]);
+    if (insertPositions.has(i + 1)) {
+      result.push(getRandomNumberString());
+    }
+  }
+
+  return result;
 };
 
 const generateModeWords = (mode, count = 150) => {
@@ -305,6 +344,13 @@ export default function App() {
     }
   }, [status]);
 
+  // --- Ensure word-mode completion is handled reliably ---
+  useEffect(() => {
+    if (status === 'typing' && mode !== 'time' && currentWordIndex >= words.length) {
+      handleFinishTest(typedHistory);
+    }
+  }, [status, mode, currentWordIndex, words.length, typedHistory, handleFinishTest]);
+
   // --- Core Game Timer Loop Effect ---
   useEffect(() => {
     if (status !== 'typing') return;
@@ -376,7 +422,7 @@ export default function App() {
         setWords(prev => [...prev, ...getShuffledWords(50)]);
       }
 
-      if (mode !== 'time' && currentWordIndex + 1 >= words.length) {
+      if (mode !== 'time' && nextHistory.length >= words.length) {
         handleFinishTest(nextHistory);
       }
     } else {
