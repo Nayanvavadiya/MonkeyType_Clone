@@ -20,6 +20,9 @@ const WORDS_BANK = [
 
 
 
+const PUNCTUATION_SYMBOLS = ['!', '-', '.', ','];
+const DIGITS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
 const getShuffledWords = (count = 150) => {
   const result = [];
   for (let i = 0; i < count; i++) {
@@ -27,6 +30,30 @@ const getShuffledWords = (count = 150) => {
     result.push(randomWord);
   }
   return result;
+};
+
+const getQuoteWords = (count = 150) => {
+  const result = getShuffledWords(count);
+  return result.map((word, index) => {
+    if (index === result.length - 1) return word;
+    const symbol = PUNCTUATION_SYMBOLS[Math.floor(Math.random() * PUNCTUATION_SYMBOLS.length)];
+    return `${word}${symbol}`;
+  });
+};
+
+const getNumberWords = (count = 150) => {
+  const result = getShuffledWords(count);
+  return result.map((word, index) => {
+    if (index === result.length - 1) return word;
+    const number = DIGITS[Math.floor(Math.random() * DIGITS.length)];
+    return `${word}${number}`;
+  });
+};
+
+const generateModeWords = (mode, count = 150) => {
+  if (mode === 'quote') return getQuoteWords(count);
+  if (mode === 'numbers') return getNumberWords(count);
+  return getShuffledWords(count);
 };
 
 // Pure utilities to compute dates and timestamps outside render scope
@@ -114,7 +141,7 @@ export default function App() {
     const initialMode = localStorage.getItem('vt-mode') || 'time';
     const initialWordLimit = Number(localStorage.getItem('vt-wordLimit')) || 25;
     const numWords = initialMode === 'time' ? 150 : initialWordLimit;
-    return getShuffledWords(numWords);
+    return generateModeWords(initialMode, numWords);
   });
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [currentInput, setCurrentInput] = useState('');
@@ -222,7 +249,9 @@ export default function App() {
     if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
 
     const numWords = targetMode === 'time' ? 150 : targetWords;
-    setWords(getShuffledWords(numWords));
+    const nextWords = generateModeWords(targetMode, numWords);
+
+    setWords(nextWords);
     setCurrentWordIndex(0);
     setCurrentInput('');
     setTypedHistory([]);
@@ -343,7 +372,7 @@ export default function App() {
         setWords(prev => [...prev, ...getShuffledWords(50)]);
       }
 
-      if (mode === 'words' && currentWordIndex + 1 >= words.length) {
+      if (mode !== 'time' && currentWordIndex + 1 >= words.length) {
         handleFinishTest(nextHistory);
       }
     } else {
@@ -357,6 +386,16 @@ export default function App() {
           setCorrectKeysPressed(prev => prev + 1);
         }
       }
+
+      if (mode !== 'time' && currentWordIndex === words.length - 1 && value === words[currentWordIndex]) {
+        const nextHistory = [...typedHistory, value];
+        setTypedHistory(nextHistory);
+        setCurrentWordIndex(prev => prev + 1);
+        setCurrentInput('');
+        handleFinishTest(nextHistory);
+        return;
+      }
+
       setCurrentInput(value);
     }
   };
@@ -464,6 +503,18 @@ export default function App() {
                     onClick={() => handleModeChange('words')}
                   >
                     words
+                  </button>
+                  <button
+                    className={`config-btn ${mode === 'quote' ? 'active' : ''}`}
+                    onClick={() => handleModeChange('quote')}
+                  >
+                    quote
+                  </button>
+                  <button
+                    className={`config-btn ${mode === 'numbers' ? 'active' : ''}`}
+                    onClick={() => handleModeChange('numbers')}
+                  >
+                    numbers
                   </button>
                 </div>
               </div>
