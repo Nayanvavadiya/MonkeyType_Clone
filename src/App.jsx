@@ -430,17 +430,16 @@ export default function App() {
         </div>
 
         <div className="header-settings">
-          <div className="theme-selector">
-            <label htmlFor="themeSelect">Theme:</label>
-            <select
-              id="themeSelect"
-              className="theme-dropdown"
-              value={theme}
-              onChange={(e) => setTheme(e.target.value)}
+          <div className="theme-toggle">
+            <button
+              className={`theme-toggle-btn ${theme === 'light' ? 'active' : ''}`}
+              onClick={() => setTheme(theme === 'light' ? 'default' : 'light')}
+              aria-label="Toggle theme"
             >
-              <option value="default">Midnight Slate</option>
-              <option value="light">Crisp Light</option>
-            </select>
+              <span className="theme-icon light-icon">☀️</span>
+              <span className="theme-toggle-slider"></span>
+              <span className="theme-icon dark-icon">🌙</span>
+            </button>
           </div>
         </div>
       </header>

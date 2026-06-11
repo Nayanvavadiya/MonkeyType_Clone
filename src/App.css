@@ -40,7 +40,7 @@
   gap: 1.5rem;
 }
 
-/* Sound Controller & Theme Select */
+/* Sound Controller & Theme Toggle */
 .sound-toggle-btn {
   background: transparent;
   color: var(--sub-color);
@@ -58,36 +58,84 @@
   background: var(--card-bg);
 }
 
-.theme-selector {
+/* Theme Toggle Switch */
+.theme-toggle {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  padding: 0.35rem 0.75rem;
-  border-radius: 8px;
+  gap: 0.75rem;
 }
 
-.theme-selector label {
-  font-size: 0.8rem;
-  color: var(--sub-color);
-  font-weight: 500;
-}
-
-.theme-dropdown {
+.theme-toggle-btn {
+  position: relative;
+  width: 70px;
+  height: 38px;
   background: transparent;
-  color: var(--text-color);
-  border: none;
-  font-family: inherit;
-  font-size: 0.85rem;
-  font-weight: 600;
+  border: 2px solid var(--border-color);
+  border-radius: 25px;
   cursor: pointer;
-  outline: none;
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  gap: 0.5rem;
+  transition: border-color 0.3s ease;
+  padding: 0;
 }
 
-.theme-dropdown option {
-  background-color: var(--bg-color);
-  color: var(--text-color);
+.theme-toggle-btn:hover {
+  border-color: var(--main-color);
+}
+
+.theme-icon {
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  position: relative;
+  z-index: 2;
+}
+
+.theme-icon.light-icon {
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.theme-icon.dark-icon {
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.theme-toggle-btn.active .theme-icon.light-icon {
+  opacity: 1;
+}
+
+.theme-toggle-btn.active .theme-icon.dark-icon {
+  opacity: 0.5;
+}
+
+.theme-toggle-btn:not(.active) .theme-icon.light-icon {
+  opacity: 0.5;
+}
+
+.theme-toggle-btn:not(.active) .theme-icon.dark-icon {
+  opacity: 1;
+}
+
+.theme-toggle-slider {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 32px;
+  height: 32px;
+  background: var(--main-color);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+.theme-toggle-btn.active .theme-toggle-slider {
+  left: 36px;
 }
 
 /* Main Dashboard Grid */
