@@ -537,8 +537,7 @@ export default function App() {
       {status !== 'completed' ? (
         <>
           {/* Config Controls Bar */}
-          {status === 'idle' && (
-            <div className="config-bar">
+          <div className="config-bar">
               <div className="config-group">
                 <span className="config-label">mode:</span>
                 <div className="config-btn-group">
@@ -598,7 +597,6 @@ export default function App() {
                 )}
               </div>
             </div>
-          )}
 
           {/* Typing Area Panel */}
           <div
