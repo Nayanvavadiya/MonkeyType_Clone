@@ -512,7 +512,7 @@ export default function App() {
       {/* App Header */}
       <header className="app-header">
         <div className="logo-section">
-          <div className="logo-icon">
+          <div className="logo-icon" onClick={() => window.location.reload()}>
             ⚡ VelocityType
           </div>
           <span className="logo-sub">typing speed run</span>
