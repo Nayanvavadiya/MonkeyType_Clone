@@ -3,26 +3,32 @@ import './App.css'
 
 // 200 Most Common English Words to Shuffle
 const WORDS_BANK = [
-  "The", "be", "to", "of", "and", "A", "in", "that", "have", "I", "It", "for", "not", "on", "with", "He", "as", "you", "do", "at",
-  "This", "but", "his", "by", "from", "They", "we", "say", "her", "She", "or", "an", "will", "My", "one", "All", "would", "There",
-  "Their", "What", "so", "up", "out", "if", "about", "who", "get", "Which", "go", "me", "when", "make", "can", "like", "time", "no",
-  "just", "him", "know", "Take", "people", "into", "year", "Your", "good", "some", "could", "Them", "see", "other", "than", "then",
-  "good morning", "new world", "think fast", "work hard", "take care", "beautiful day", "follow through", "look ahead",
-  "now", "look", "only", "Come", "its", "over", "Think", "also", "back", "after", "use", "Two", "how", "our", "work", "First", "well",
-  "way", "even", "New", "want", "because", "Any", "these", "give", "day", "Most", "us", "Are", "was", "were", "been", "has", "had",
-  "Why", "where", "Here", "again", "Almost", "always", "Another", "answer", "around", "ask", "Beautiful", "before", "began", "begin",
-  "behind", "believe", "between", "black", "blue", "Both", "boy", "bring", "Brother", "brought", "build", "busy", "buy", "call",
-  "Came", "car", "Carry", "center", "Change", "child", "children", "city", "Clean", "clear", "close", "cold", "color", "Country",
-  "course", "cut", "Dark", "decide", "different", "Does", "done", "door", "down", "Draw", "drink", "drive", "Each", "early", "earth",
-  "east", "Easy", "eat", "education", "Egg", "eight", "end", "Enough", "ever", "every", "Example", "eye", "face", "fact", "fall",
-  "family", "far", "Farm", "fast", "Father", "fear", "feel", "feet", "Few", "field", "Fight", "fill", "find", "Fine", "fire",
-  "Fish", "five", "Floor", "fly", "food", "Foot", "forest", "forget", "Form", "found", "four", "Free", "friend", "Life", "world"
+  "the", "be", "to", "of", "and", "a", "in", "that", "have", "i", "it", "for", "not", "on", "with", "he", "as", "you", "do", "at",
+  "this", "but", "his", "by", "from", "they", "we", "say", "her", "she", "or", "an", "will", "my", "one", "all", "would", "there",
+  "their", "what", "so", "up", "out", "if", "about", "who", "get", "which", "go", "me", "when", "make", "can", "like", "time", "no",
+  "just", "him", "know", "take", "people", "into", "year", "your", "good", "some", "could", "them", "see", "other", "than", "then",
+  "good", "morning", "new", "world", "think", "fast", "work","hard", "take:","care", "beautiful","day", "follow","through", "look","ahead",
+  "now", "look", "only", "come", "its", "over", "think", "also", "back", "after", "use", "two", "how", "our", "work", "first", "well",
+  "way", "even", "new", "want", "because", "Any", "these", "give", "day", "most", "us", "are", "was", "were", "been", "has", "had",
+  "why", "where", "here", "again", "almost", "always", "another", "answer", "around", "ask", "beautiful", "before", "began", "begin",
+  "behind", "believe", "between", "black", "blue", "both", "boy", "bring", "brother", "brought", "build", "busy", "buy", "call",
+  "came", "car", "carry", "center", "change", "child", "children", "city", "clean", "clear", "close", "cold", "color", "country",
+  "course", "cut", "dark", "decide", "different", "does", "done", "door", "down", "draw", "drink", "drive", "each", "early", "earth",
+  "east", "easy", "eat", "education", "egg", "eight", "end", "enough", "ever", "every", "example", "eye", "face", "fact", "fall",
+  "family", "far", "farm", "fast", "father", "fear", "feel", "feet", "few", "field", "fight", "fill", "find", "fine", "fire",
+  "fish", "five", "floor", "fly", "food", "foot", "forest", "forget", "form", "found", "four", "free", "friend", "life", "world"
 ];
 
 
 
-const PUNCTUATION_SYMBOLS = ['!', '-', '.', ','];
+const PUNCTUATION_SYMBOLS = ['!', '-', '.', ',', '?', ';', '"'];
 const DIGITS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+// Capitalized versions of words used for punctuation mode
+const CAPITALIZED_WORDS = WORDS_BANK.map(w => {
+  if (!w || typeof w !== 'string') return w;
+  return w.charAt(0).toUpperCase() + w.slice(1);
+});
 
 const getShuffledWords = (count = 150) => {
   const result = [];
@@ -67,32 +73,62 @@ const getRandomNumberString = () => {
   return number.replace(/^0+/, '') || '0';
 };
 
-const getNumberWords = (count = 150) => {
-  const words = getShuffledWords(count);
-  const result = [];
+// Insert numbers into an existing words array at random positions
+const insertNumbersInto = (words) => {
+  const count = words.length;
+  const result = [...words];
   const minNumbers = Math.max(1, Math.floor(count / 15));
   const maxNumbers = Math.max(minNumbers, Math.floor(count / 10));
   const numberCount = Math.floor(Math.random() * (maxNumbers - minNumbers + 1)) + minNumbers;
   const insertPositions = new Set();
 
   while (insertPositions.size < numberCount) {
-    insertPositions.add(Math.floor(Math.random() * (words.length + 1)));
+    insertPositions.add(Math.floor(Math.random() * (result.length + 1)));
   }
 
-  for (let i = 0; i < words.length; i++) {
-    result.push(words[i]);
-    if (insertPositions.has(i + 1)) {
-      result.push(getRandomNumberString());
-    }
-  }
+  // Convert set to array and insert numbers in descending order to keep indices valid
+  Array.from(insertPositions).sort((a, b) => b - a).forEach(pos => {
+    result.splice(pos, 0, getRandomNumberString());
+  });
 
   return result;
 };
 
-const generateModeWords = (mode, count = 150) => {
-  if (mode === 'quote') return getQuoteWords(count);
-  if (mode === 'numbers') return getNumberWords(count);
-  return getShuffledWords(count);
+// Apply punctuation modifiers: randomly capitalize ~20% of words and append punctuation to some words
+const applyPunctuationModifier = (words) => {
+  const count = words.length;
+  const result = [...words];
+
+  const numToCap = Math.max(1, Math.round(count * 0.2)); // ~20%
+  const capPositions = new Set();
+  while (capPositions.size < numToCap) {
+    capPositions.add(Math.floor(Math.random() * count));
+  }
+
+  capPositions.forEach(pos => {
+    const cap = CAPITALIZED_WORDS[Math.floor(Math.random() * CAPITALIZED_WORDS.length)];
+    if (cap) result[pos] = cap;
+  });
+
+  return result;
+};
+
+// Generate words according to mode and optional modifiers
+const generateModeWords = (mode, count = 150, options = {}) => {
+  const { punctuationEnabled = false, numbersEnabled = false } = options;
+
+  let baseWords;
+  if (mode === 'quote') {
+    baseWords = getQuoteWords(count);
+  } else {
+    baseWords = getShuffledWords(count);
+  }
+
+  let processed = baseWords;
+  if (punctuationEnabled) processed = applyPunctuationModifier(processed);
+  if (numbersEnabled) processed = insertNumbersInto(processed);
+
+  return processed;
 };
 
 // Pure utilities to compute dates and timestamps outside render scope
@@ -170,6 +206,9 @@ export default function App() {
   const [mode, setMode] = useState(() => localStorage.getItem('vt-mode') || 'time');
   const [timeLimit, setTimeLimit] = useState(() => Number(localStorage.getItem('vt-timeLimit')) || 30);
   const [wordLimit, setWordLimit] = useState(() => Number(localStorage.getItem('vt-wordLimit')) || 25);
+  const [quoteLimit, setQuoteLimit] = useState(() => Number(localStorage.getItem('vt-quoteLimit')) || 25);
+  const [punctuationEnabled, setPunctuationEnabled] = useState(() => localStorage.getItem('vt-punctuation') === 'true');
+  const [numbersEnabled, setNumbersEnabled] = useState(() => localStorage.getItem('vt-numbers') === 'true');
 
   // --- Current Test Result ---
   const [testResult, setTestResult] = useState(null);
@@ -179,17 +218,16 @@ export default function App() {
   const [words, setWords] = useState(() => {
     const initialMode = localStorage.getItem('vt-mode') || 'time';
     const initialWordLimit = Number(localStorage.getItem('vt-wordLimit')) || 25;
-    const numWords = initialMode === 'time' ? 150 : initialWordLimit;
-    return generateModeWords(initialMode, numWords);
+    const initialQuoteLimit = Number(localStorage.getItem('vt-quoteLimit')) || 25;
+    const initialTime = Number(localStorage.getItem('vt-timeLimit')) || 30;
+    const computeWordsForTime = (t) => Math.max(150, Math.ceil(t * 5)); // ~5 words/sec buffer
+    const numWords = initialMode === 'time' ? computeWordsForTime(initialTime) : (initialMode === 'quote' ? initialQuoteLimit : initialWordLimit);
+    return generateModeWords(initialMode, numWords, { punctuationEnabled: localStorage.getItem('vt-punctuation') === 'true', numbersEnabled: localStorage.getItem('vt-numbers') === 'true' });
   });
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [currentInput, setCurrentInput] = useState('');
   const [typedHistory, setTypedHistory] = useState([]);
-  const [timeLeft, setTimeLeft] = useState(() => {
-    const initialMode = localStorage.getItem('vt-mode') || 'time';
-    const initialTimeLimit = Number(localStorage.getItem('vt-timeLimit')) || 30;
-    return initialMode === 'time' ? initialTimeLimit : 0;
-  });
+  const [timeLeft, setTimeLeft] = useState(() => Number(localStorage.getItem('vt-timeLimit')) || 30);
   const [timeElapsed, setTimeElapsed] = useState(0);
 
   // --- Real-Time Analytics ---
@@ -287,12 +325,13 @@ export default function App() {
   }, [handleFinishTest, handleRecordTick]);
 
   // Restart typing workspace with optional param override (prevents stale state dependency)
-  const restartTest = useCallback((targetMode = mode, targetTime = timeLimit, targetWords = wordLimit) => {
+  const restartTest = useCallback((targetMode = mode, targetTime = timeLimit, targetWords = wordLimit, targetQuote = quoteLimit, opts = {}) => {
     setStatus('idle');
     if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
 
-    const numWords = targetMode === 'time' ? 150 : targetWords;
-    const nextWords = generateModeWords(targetMode, numWords);
+    const computeWordsForTime = (t) => Math.max(150, Math.ceil(t * 5)); // same buffer as init
+    const numWords = targetMode === 'time' ? computeWordsForTime(targetTime) : (targetMode === 'quote' ? targetQuote : targetWords);
+    const nextWords = generateModeWords(targetMode, numWords, { punctuationEnabled: opts.punctuationEnabled ?? punctuationEnabled, numbersEnabled: opts.numbersEnabled ?? numbersEnabled });
 
     setWords(nextWords);
     setCurrentWordIndex(0);
@@ -322,7 +361,10 @@ export default function App() {
     localStorage.setItem('vt-mode', mode);
     localStorage.setItem('vt-timeLimit', timeLimit.toString());
     localStorage.setItem('vt-wordLimit', wordLimit.toString());
-  }, [mode, timeLimit, wordLimit]);
+    localStorage.setItem('vt-quoteLimit', quoteLimit.toString());
+    localStorage.setItem('vt-punctuation', punctuationEnabled ? 'true' : 'false');
+    localStorage.setItem('vt-numbers', numbersEnabled ? 'true' : 'false');
+  }, [mode, timeLimit, wordLimit, quoteLimit, punctuationEnabled, numbersEnabled]);
 
   // --- Window Resize Caret Update Effect ---
   useEffect(() => {
@@ -384,17 +426,22 @@ export default function App() {
   // --- Settings Select Handlers ---
   const handleModeChange = (newMode) => {
     setMode(newMode);
-    restartTest(newMode, timeLimit, wordLimit);
+    restartTest(newMode, timeLimit, wordLimit, quoteLimit);
   };
 
   const handleTimeLimitChange = (newTime) => {
     setTimeLimit(newTime);
-    restartTest(mode, newTime, wordLimit);
+    restartTest(mode, newTime, wordLimit, quoteLimit);
   };
 
   const handleWordLimitChange = (newWordLimit) => {
     setWordLimit(newWordLimit);
-    restartTest(mode, timeLimit, newWordLimit);
+    restartTest(mode, timeLimit, newWordLimit, quoteLimit);
+  };
+
+  const handleQuoteLimitChange = (newQuoteLimit) => {
+    setQuoteLimit(newQuoteLimit);
+    restartTest(mode, timeLimit, wordLimit, newQuoteLimit);
   };
 
   // --- Inputs & Keyboard Handlers ---
@@ -419,7 +466,8 @@ export default function App() {
       setCurrentInput('');
 
       if (mode === 'time' && currentWordIndex + 10 >= words.length) {
-        setWords(prev => [...prev, ...getShuffledWords(50)]);
+        const more = generateModeWords(mode, 50, { punctuationEnabled, numbersEnabled });
+        setWords(prev => [...prev, ...more]);
       }
 
       if (mode !== 'time' && nextHistory.length >= words.length) {
@@ -538,65 +586,93 @@ export default function App() {
         <>
           {/* Config Controls Bar */}
           <div className="config-bar">
-              <div className="config-group">
-                <span className="config-label">mode:</span>
-                <div className="config-btn-group">
-                  <button
-                    className={`config-btn ${mode === 'time' ? 'active' : ''}`}
-                    onClick={() => handleModeChange('time')}
-                  >
-                    time
-                  </button>
-                  <button
-                    className={`config-btn ${mode === 'words' ? 'active' : ''}`}
-                    onClick={() => handleModeChange('words')}
-                  >
-                    words
-                  </button>
-                  <button
-                    className={`config-btn ${mode === 'quote' ? 'active' : ''}`}
-                    onClick={() => handleModeChange('quote')}
-                  >
-                    quote
-                  </button>
-                  <button
-                    className={`config-btn ${mode === 'numbers' ? 'active' : ''}`}
-                    onClick={() => handleModeChange('numbers')}
-                  >
-                    numbers
-                  </button>
-                </div>
+            {/* Group 1: Modifiers */}
+            <div className="config-group config-pill">
+              <div className="config-btn-group">
+                <button
+                  className={`config-btn ${punctuationEnabled ? 'active' : ''}`}
+                  onClick={() => {
+                    const next = !punctuationEnabled;
+                    setPunctuationEnabled(next);
+                    restartTest(mode, timeLimit, wordLimit, quoteLimit, { punctuationEnabled: next, numbersEnabled });
+                  }}
+                >
+                  @ punctuation
+                </button>
+                <button
+                  className={`config-btn ${numbersEnabled ? 'active' : ''}`}
+                  onClick={() => {
+                    const next = !numbersEnabled;
+                    setNumbersEnabled(next);
+                    restartTest(mode, timeLimit, wordLimit, quoteLimit, { punctuationEnabled, numbersEnabled: next });
+                  }}
+                >
+                  # numbers
+                </button>
               </div>
+            </div>
 
-              <div className="config-group">
-                <span className="config-label">options:</span>
+            {/* Group 2: Test Mode */}
+            <div className="config-group config-pill">
+              <div className="config-btn-group">
+                <button
+                  className={`config-btn ${mode === 'time' ? 'active' : ''}`}
+                  onClick={() => handleModeChange('time')}
+                >
+                  time
+                </button>
+                <button
+                  className={`config-btn ${mode === 'words' ? 'active' : ''}`}
+                  onClick={() => handleModeChange('words')}
+                >
+                  words
+                </button>
+                <button
+                  className={`config-btn ${mode === 'quote' ? 'active' : ''}`}
+                  onClick={() => handleModeChange('quote')}
+                >
+                  " quote
+                </button>
+              </div>
+            </div>
+
+            {/* Group 3: Mode Options */}
+            <div className="config-group config-pill">
+              <div className="config-btn-group">
                 {mode === 'time' ? (
-                  <div className="config-btn-group">
-                    {[15, 30, 60, 120].map((t) => (
-                      <button
-                        key={t}
-                        className={`config-btn ${timeLimit === t ? 'active' : ''}`}
-                        onClick={() => handleTimeLimitChange(t)}
-                      >
-                        {t}
-                      </button>
-                    ))}
-                  </div>
+                  [15, 30, 60, 120].map((t) => (
+                    <button
+                      key={t}
+                      className={`config-btn ${timeLimit === t ? 'active' : ''}`}
+                      onClick={() => handleTimeLimitChange(t)}
+                    >
+                      {t}
+                    </button>
+                  ))
+                ) : mode === 'words' ? (
+                  [10, 25, 50, 100].map((w) => (
+                    <button
+                      key={w}
+                      className={`config-btn ${wordLimit === w ? 'active' : ''}`}
+                      onClick={() => handleWordLimitChange(w)}
+                    >
+                      {w}
+                    </button>
+                  ))
                 ) : (
-                  <div className="config-btn-group">
-                    {[10, 25, 50, 100].map((w) => (
-                      <button
-                        key={w}
-                        className={`config-btn ${wordLimit === w ? 'active' : ''}`}
-                        onClick={() => handleWordLimitChange(w)}
-                      >
-                        {w}
-                      </button>
-                    ))}
-                  </div>
+                  [10, 25, 50, 100].map((q) => (
+                    <button
+                      key={q}
+                      className={`config-btn ${quoteLimit === q ? 'active' : ''}`}
+                      onClick={() => handleQuoteLimitChange(q)}
+                    >
+                      {q}
+                    </button>
+                  ))
                 )}
               </div>
             </div>
+          </div>
 
           {/* Typing Area Panel */}
           <div

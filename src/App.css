@@ -156,11 +156,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 2rem;
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  padding: 0.5rem 1.5rem;
-  border-radius: 10px;
+  gap: 1rem;
   width: fit-content;
   margin: 0 auto;
 }
@@ -169,6 +165,13 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+.config-pill {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
 }
 
 .config-label {
@@ -190,6 +193,8 @@
   font-weight: 600;
   padding: 0.25rem 0.6rem;
   border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .config-btn:hover {
