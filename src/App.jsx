@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useLayoutEffect } from 'react'
 import './App.css'
 
+
 // 200 Most Common English Words to Shuffle
 const WORDS_BANK = [
   "the", "be", "to", "of", "and", "a", "in", "that", "have", "i", "it", "for", "not", "on", "with", "he", "as", "you", "do", "at",
@@ -597,7 +598,7 @@ export default function App() {
                     restartTest(mode, timeLimit, wordLimit, quoteLimit, { punctuationEnabled: next, numbersEnabled });
                   }}
                 >
-                  @ punctuation
+                  <i className="fa-solid fa-at"></i> punctuation
                 </button>
                 <button
                   className={`config-btn ${numbersEnabled ? 'active' : ''}`}
@@ -607,7 +608,7 @@ export default function App() {
                     restartTest(mode, timeLimit, wordLimit, quoteLimit, { punctuationEnabled, numbersEnabled: next });
                   }}
                 >
-                  # numbers
+                  <i class="fa-solid fa-hashtag"></i> numbers
                 </button>
               </div>
             </div>
@@ -619,19 +620,19 @@ export default function App() {
                   className={`config-btn ${mode === 'time' ? 'active' : ''}`}
                   onClick={() => handleModeChange('time')}
                 >
-                  time
+                  <i class="fa-regular fa-clock"></i> time
                 </button>
                 <button
                   className={`config-btn ${mode === 'words' ? 'active' : ''}`}
                   onClick={() => handleModeChange('words')}
                 >
-                  words
+                  <i class="fa-solid fa-a"></i> words
                 </button>
                 <button
                   className={`config-btn ${mode === 'quote' ? 'active' : ''}`}
                   onClick={() => handleModeChange('quote')}
                 >
-                  " quote
+                  <i class="fa-solid fa-quote-right"></i> quote
                 </button>
               </div>
             </div>
